@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Duel de Réflexes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: #2196f3;
+      color: white;
+    }
+    #go {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #ff5252;
+    }
+    #winner {
+      font-size: 1.4rem;
+      margin-top: 15px;
+      color: #4caf50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Duel de Réflexes</h1>
+  <p>Joueur 1 : A — Joueur 2 : L</p>
+
+  <button id="startBtn">Lancer le duel</button>
+
+  <div id="go"></div>
+  <div id="winner"></div>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const goDiv = document.getElementById("go");
+    const winnerDiv = document.getElementById("winner");
+
+    let ready = false;
+    let finished = false;
+    let startTime = 0;
+
+    function reset() {
+      goDiv.textContent = "";
+      winnerDiv.textContent = "";
+      ready = false;
+      finished = false;
+    }
+
+    startBtn.addEventListener("click", () => {
+      reset();
+      startBtn.disabled = true;
+      winnerDiv.textContent = "Préparez-vous...";
+
+      const delay = Math.random() * 2000 + 1000;
+
+      setTimeout(() => {
+        goDiv.textContent = "GO !";
+        winnerDiv.textContent = "";
+        ready = true;
+        startTime = performance.now();
+      }, delay);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!ready || finished) return;
+
+      const key = e.key.toLowerCase();
+      const reaction = ((performance.now() - startTime) / 1000).toFixed(3);
+
+      if (key === "a") {
+        winnerDiv.textContent = `Joueur 1 gagne en ${reaction} s`;
+        finished = true;
+      }
+      if (key === "l") {
+        winnerDiv.textContent = `Joueur 2 gagne en ${reaction} s`;
+        finished = true;
+      }
+
+      if (finished) {
+        startBtn.disabled = false;
+        goDiv.textContent = "";
+        ready = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
